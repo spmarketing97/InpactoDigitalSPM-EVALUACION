@@ -1,0 +1,1799 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ImpactoDigitalSPM - EVALUACION</title>
+    <link rel="icon" type="image/png" href="IMG/LOGO PRINCIPAL.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .header-banner {
+            background: linear-gradient(90deg, #ff0000 0%, #ff4444 100%);
+            text-align: center;
+            padding: 10px;
+            font-weight: bold;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: pulse 2s infinite;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+
+        .logo-section {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #ffff00;
+            box-shadow: 0 0 15px rgba(255, 255, 0, 0.3);
+        }
+
+        .brand-name {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #9D4EDD;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .main-title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 25px 0 15px 0;
+            line-height: 1.2;
+            padding: 0 10px;
+        }
+
+        .main-title .highlight {
+            color: #ffff00;
+            text-shadow: 0 0 8px rgba(255, 255, 0, 0.5);
+        }
+
+        .main-title .red {
+            color: #ff0000;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 16px;
+            margin-bottom: 25px;
+            color: #cccccc;
+            line-height: 1.4;
+            padding: 0 15px;
+        }
+
+        .test-container {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .question {
+            margin-bottom: 25px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .question:nth-child(1) { animation-delay: 0.1s; }
+        .question:nth-child(2) { animation-delay: 0.2s; }
+        .question:nth-child(3) { animation-delay: 0.3s; }
+        .question:nth-child(4) { animation-delay: 0.4s; }
+        .question:nth-child(5) { animation-delay: 0.5s; }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .question-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #ffffff;
+        }
+
+        .question-number {
+            color: #ffff00;
+            margin-right: 10px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid transparent;
+            border-radius: 8px;
+            padding: 12px 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .option:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #ffff00;
+            transform: translateX(5px);
+        }
+
+        .option.selected {
+            background: rgba(255, 255, 0, 0.2);
+            border-color: #ffff00;
+            color: #ffff00;
+        }
+
+        .option input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .cta-section {
+            text-align: center;
+            margin: 25px 0;
+            padding: 0 20px;
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, #ff0000, #ff4444);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 12px rgba(255, 0, 0, 0.3);
+            width: 100%;
+            max-width: 350px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(255, 0, 0, 0.6);
+            background: linear-gradient(45deg, #ff4444, #ff0000);
+            animation: pulseGold 1.5s infinite;
+        }
+
+        .cta-button:active {
+            transform: translateY(0) scale(1.02);
+        }
+
+        @keyframes pulseGold {
+            0%, 100% {
+                box-shadow: 0 8px 25px rgba(255, 0, 0, 0.6);
+            }
+            50% {
+                box-shadow: 0 8px 30px rgba(255, 215, 0, 0.8);
+            }
+        }
+
+        .guarantee-text {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #00ff00;
+            font-weight: bold;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .countdown {
+            background: rgba(255, 0, 0, 0.9);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+            margin: 15px 0;
+            font-size: 16px;
+            text-align: center;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
+            border: 2px solid #ffff00;
+            animation: pulseTime 1.5s infinite;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+        
+        @keyframes pulseTime {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-container {
+            background: #1a1a1a;
+            border-radius: 15px;
+            width: 95%;
+            max-width: 500px;
+            max-height: 85vh;
+            overflow-y: auto;
+            border: 2px solid #ffff00;
+            box-shadow: 0 0 20px rgba(255, 255, 0, 0.3);
+        }
+
+        .modal-header {
+            background: rgba(255, 255, 0, 0.08);
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(255, 255, 0, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            color: #ffff00;
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 24px;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff0000;
+        }
+
+        .progress-container {
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ffff00, #ff0000);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+            width: 12.5%;
+        }
+
+        .progress-text {
+            text-align: center;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .modal-content {
+            padding: 20px;
+        }
+
+        .question-container {
+            text-align: center;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .question-title-modal {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #ffffff;
+            line-height: 1.3;
+        }
+
+        .question-number-modal {
+            color: #ffff00;
+            margin-right: 10px;
+        }
+
+        .options-modal {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .option-modal {
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid transparent;
+            border-radius: 10px;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            text-align: left;
+            position: relative;
+        }
+
+        .option-modal:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #ffff00;
+            transform: translateX(5px);
+        }
+
+        .option-modal.selected {
+            background: rgba(255, 255, 0, 0.2);
+            border-color: #ffff00;
+            color: #ffff00;
+        }
+
+        .form-container {
+            text-align: left;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            color: #ffff00;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #ffff00;
+            background: rgba(255, 255, 0, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+            max-height: 200px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(45deg, #00ff00, #44ff44);
+            color: #000000;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 255, 0, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .logo {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .brand-name {
+                font-size: 16px;
+            }
+            
+            .main-title {
+                font-size: 20px;
+                padding: 0 5px;
+            }
+            
+            .subtitle {
+                font-size: 14px;
+                padding: 0 10px;
+            }
+            
+            .countdown {
+                font-size: 12px;
+                padding: 6px 12px;
+            }
+            
+            .cta-button {
+                padding: 12px 25px;
+                font-size: 14px;
+            }
+            
+            .modal-container {
+                width: 98%;
+                max-height: 92vh;
+            }
+            
+            .modal-header {
+                padding: 12px 15px;
+            }
+            
+            .modal-header h3 {
+                font-size: 14px;
+            }
+            
+            .modal-content {
+                padding: 15px;
+            }
+            
+            .progress-container {
+                padding: 12px 15px;
+            }
+            
+            .question-title-modal {
+                font-size: 16px;
+                margin-bottom: 15px;
+            }
+            
+            .option-modal {
+                font-size: 13px;
+                padding: 10px 12px;
+            }
+            
+            .form-input {
+                padding: 10px 12px;
+                font-size: 14px;
+            }
+            
+            .submit-btn {
+                padding: 12px 25px;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-title {
+                font-size: 18px;
+            }
+            
+            .subtitle {
+                font-size: 13px;
+            }
+            
+            .countdown {
+                font-size: 11px;
+                padding: 5px 10px;
+            }
+            
+            .modal-container {
+                width: 100%;
+                margin: 0;
+                border-radius: 0;
+                max-height: 100vh;
+            }
+            
+            .question-title-modal {
+                font-size: 15px;
+            }
+            
+            .option-modal {
+                font-size: 12px;
+                                 padding: 8px 10px;
+             }
+         }
+
+         /* Floating Notifications */
+         .floating-notification {
+             position: fixed;
+             left: 20px;
+             top: 50% !important;
+             transform: translateY(-50%);
+             background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+             border: 1px solid #9D4EDD;
+             border-radius: 8px;
+             padding: 12px 15px;
+             box-shadow: 0 4px 15px rgba(157, 78, 221, 0.3);
+             z-index: 999;
+             max-width: 280px;
+             animation: slideInLeft 0.5s ease-out, slideOutLeft 0.5s ease-in 4.5s;
+             animation-fill-mode: both;
+         }
+
+         .notification-header {
+             display: flex;
+             align-items: center;
+             margin-bottom: 6px;
+         }
+
+         .notification-avatar {
+             width: 25px;
+             height: 25px;
+             border-radius: 50%;
+             background: linear-gradient(45deg, #ffff00, #ff4444);
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             font-weight: bold;
+             color: #000;
+             font-size: 10px;
+             margin-right: 8px;
+         }
+
+         .notification-name {
+             color: #9D4EDD;
+             font-weight: bold;
+             font-size: 12px;
+             flex-grow: 1;
+         }
+
+         .notification-stars {
+             color: #ffff00;
+             font-size: 10px;
+         }
+
+         .notification-message {
+             color: #ffffff;
+             font-size: 11px;
+             line-height: 1.3;
+             margin-bottom: 4px;
+         }
+
+         .notification-amount {
+             color: #00ff00;
+             font-weight: bold;
+             font-size: 12px;
+             text-align: center;
+         }
+
+         @keyframes slideInLeft {
+             from {
+                 transform: translateX(-100%);
+                 opacity: 0;
+             }
+             to {
+                 transform: translateX(0);
+                 opacity: 1;
+             }
+         }
+
+         @keyframes slideOutLeft {
+             from {
+                 transform: translateX(0);
+                 opacity: 1;
+             }
+             to {
+                 transform: translateX(-100%);
+                 opacity: 0;
+             }
+         }
+
+         @media (max-width: 768px) {
+             .floating-notification {
+                 left: 10px;
+                 max-width: 220px;
+                 padding: 8px 10px;
+             }
+             
+             .notification-name {
+                 font-size: 11px;
+             }
+             
+             .notification-message {
+                 font-size: 10px;
+             }
+             
+             .notification-amount {
+                 font-size: 11px;
+             }
+         }
+
+         /* Cookie Banner */
+         .cookie-banner {
+             position: fixed;
+             bottom: 0;
+             left: 0;
+             right: 0;
+             background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+             border-top: 2px solid #9D4EDD;
+             padding: 20px;
+             z-index: 1001;
+             box-shadow: 0 -4px 15px rgba(157, 78, 221, 0.3);
+             display: none;
+         }
+
+         .cookie-content {
+             max-width: 1200px;
+             margin: 0 auto;
+             display: flex;
+             align-items: center;
+             gap: 20px;
+             flex-wrap: wrap;
+         }
+
+         .cookie-text {
+             flex: 1;
+             color: #ffffff;
+             font-size: 14px;
+             line-height: 1.4;
+         }
+
+         .cookie-buttons {
+             display: flex;
+             gap: 10px;
+             flex-wrap: wrap;
+         }
+
+         .cookie-btn {
+             padding: 8px 16px;
+             border: none;
+             border-radius: 20px;
+             font-weight: bold;
+             cursor: pointer;
+             transition: all 0.3s ease;
+             font-size: 12px;
+         }
+
+         .cookie-accept {
+             background: #9D4EDD;
+             color: white;
+         }
+
+         .cookie-accept:hover {
+             background: #8B3FC7;
+             transform: scale(1.05);
+         }
+
+         .cookie-settings {
+             background: transparent;
+             color: #9D4EDD;
+             border: 1px solid #9D4EDD;
+         }
+
+         .cookie-settings:hover {
+             background: #9D4EDD;
+             color: white;
+         }
+
+         @media (max-width: 768px) {
+             .cookie-content {
+                 flex-direction: column;
+                 text-align: center;
+             }
+             
+             .cookie-text {
+                 font-size: 12px;
+             }
+             
+             .cookie-buttons {
+                 justify-content: center;
+             }
+         }
+    </style>
+</head>
+<body>
+    <div class="header-banner">
+        🔥 EVALUACIÓN EXCLUSIVA - SOLO PARA PERSONAS SERIAS Y COMPROMETIDAS 🔥
+    </div>
+
+    <div class="container">
+        <div class="logo-section">
+                          <img src="IMG/LOGO PRINCIPAL.png" alt="ImpactoDigitalSPM Logo" class="logo">
+            <div class="brand-name">ImpactoDigitalSPM</div>
+            <div id="socialProof" style="margin-top: 15px; background: linear-gradient(45deg, #FFD700, #FFA500); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: bold; font-size: 16px; text-align: center; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); animation: glow 2s ease-in-out infinite alternate; padding: 8px 12px; border: 2px solid #FFD700; border-radius: 15px; background-color: rgba(255, 215, 0, 0.1);">
+                🚀 Ya somos más de 6.000 Vendedores en Hotmart®️ 📈
+            </div>
+            <style>
+                @keyframes glow {
+                    from { filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5)); }
+                    to { filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.8)); }
+                }
+            </style>
+        </div>
+
+        <h1 class="main-title">
+            ¿Estás <span class="red">REALMENTE PREPARADO</span> para generar 
+                                <span class="highlight">300 dólares semanales</span> con marketing digital?
+        </h1>
+
+        <p class="subtitle">
+                            Test de 7 preguntas para acceder a la
+                <strong style="color: #ffff00;">capacitación exclusiva</strong> y generar ingresos HOY MISMO.
+        </p>
+
+        <div class="countdown" id="countdown">
+            ⏰ Tiempo limitado: 06:00 minutos para completar
+        </div>
+
+        <div class="cta-section">
+            <button class="cta-button" onclick="openTestPopup()">
+                COMENZAR EVALUACIÓN AHORA
+            </button>
+            <div class="guarantee-text" style="background: rgba(37, 211, 102, 0.1); border: 2px solid #25D366; border-radius: 12px; padding: 12px; margin: 15px 0; box-shadow: 0 0 15px rgba(37, 211, 102, 0.3);">
+                🎯 <strong style="color: #25D366; font-size: 16px; text-shadow: 0 0 8px rgba(37, 211, 102, 0.8);">EXCLUSIVO:</strong> Acceso inmediato a nuestra comunidad en <strong style="color: #25D366; text-decoration: underline;">WhatsApp</strong> para candidatos aprobados únicamente
+            </div>
+        </div>
+
+        <!-- Test Popup Modal -->
+        <div id="testModal" class="modal-overlay">
+            <div class="modal-container">
+                <div class="modal-header">
+                    <h3>Evaluación de Perfil - ImpactoDigitalSPM</h3>
+                    <button class="close-btn" onclick="closeTestPopup()">&times;</button>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span id="currentQuestion">1</span> de <span id="totalQuestions">8</span>
+                    </div>
+                </div>
+
+                <div class="modal-content" id="modalContent">
+                    <!-- Questions will be loaded here dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© <span id="currentYear"></span> ImpactoDigitalSPM - Todos los derechos Reservados</p>
+            <script>
+                // Actualizar el año automáticamente
+                document.getElementById('currentYear').textContent = new Date().getFullYear();
+            </script>
+            <div style="margin-top: 15px; font-size: 12px;">
+                <a href="legal/privacidad.html" target="_blank" style="color: #9D4EDD; text-decoration: none; margin: 0 10px;">Política de Privacidad</a> |
+                <a href="legal/terminos.html" target="_blank" style="color: #9D4EDD; text-decoration: none; margin: 0 10px;">Términos y Condiciones</a> |
+                <a href="legal/cookies.html" target="_blank" style="color: #9D4EDD; text-decoration: none; margin: 0 10px;">Política de Cookies</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cookie Banner -->
+    <div id="cookieBanner" class="cookie-banner">
+        <div class="cookie-content">
+            <div class="cookie-text">
+                🍪 Utilizamos cookies para mejorar tu experiencia y el funcionamiento del sitio. Al continuar navegando, aceptas nuestro uso de cookies según nuestra 
+                <a href="legal/cookies.html" target="_blank" style="color: #9D4EDD; text-decoration: underline;">Política de Cookies</a>.
+            </div>
+            <div class="cookie-buttons">
+                <button class="cookie-btn cookie-accept" onclick="acceptCookies()">Aceptar</button>
+                <button class="cookie-btn cookie-settings" onclick="window.open('legal/cookies.html', '_blank')">Más Info</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Test Questions Data
+        const testQuestions = [
+            {
+                id: 1,
+                question: "¿Cuál es tu principal motivación para generar $300+ semanales?",
+                options: [
+                    { value: "a", text: "Necesito ingresos urgentemente para mejorar mi situación financiera", score: 2 },
+                    { value: "b", text: "Quiero libertad financiera y trabajar desde casa", score: 2 },
+                    { value: "c", text: "Solo tengo curiosidad por ver de qué se trata", score: 0 }
+                ]
+            },
+            {
+                id: 2,
+                question: "¿Cuánto tiempo puedes dedicar DIARIAMENTE a construir tu negocio?",
+                options: [
+                    { value: "a", text: "2-4 horas diarias, estoy 100% comprometido/a", score: 2 },
+                    { value: "b", text: "1-2 horas diarias de forma consistente", score: 1 },
+                    { value: "c", text: "Solo cuando tenga tiempo libre", score: 0 }
+                ]
+            },
+            {
+                id: 3,
+                question: "¿Estás dispuesto/a a invertir en tu educación y herramientas necesarias?",
+                options: [
+                    { value: "a", text: "Sí, entiendo que toda inversión requiere capital inicial", score: 2 },
+                    { value: "b", text: "Dependería del monto y garantías de resultados", score: 1 },
+                    { value: "c", text: "Solo busco oportunidades completamente gratuitas", score: 0 }
+                ]
+            },
+            {
+                id: 4,
+                question: "¿Cómo describirías tu nivel de disciplina y constancia?",
+                options: [
+                    { value: "a", text: "Muy disciplinado/a, cuando me comprometo SIEMPRE cumplo", score: 2 },
+                    { value: "b", text: "Generalmente constante, aunque a veces me cuesta", score: 1 },
+                    { value: "c", text: "Me cuesta mantener rutinas y ser constante", score: 0 }
+                ]
+            },
+            {
+                id: 5,
+                question: "¿Qué harías si no ves resultados en las primeras 3-4 semanas?",
+                options: [
+                    { value: "a", text: "Analizar qué estoy haciendo mal y ajustar mi estrategia", score: 2 },
+                    { value: "b", text: "Continuar pero con algunas dudas sobre el proceso", score: 1 },
+                    { value: "c", text: "Probablemente buscaría otra oportunidad más rápida", score: 0 }
+                ]
+            },
+            {
+                id: 6,
+                question: "¿Qué nivel de compromiso estás dispuesto/a a asumir para alcanzar tus metas?",
+                options: [
+                    { value: "a", text: "Compromiso TOTAL - haré lo que sea necesario para tener éxito", score: 2 },
+                    { value: "b", text: "Compromiso alto, pero tengo otras prioridades importantes", score: 1 },
+                    { value: "c", text: "Compromiso bajo - solo si es fácil y no requiere mucho esfuerzo", score: 0 }
+                ]
+            },
+            {
+                id: 7,
+                question: "¿Cómo manejas el rechazo, las críticas y los desafíos?",
+                options: [
+                    { value: "a", text: "Los veo como oportunidades de aprendizaje y crecimiento", score: 2 },
+                    { value: "b", text: "Me afectan un poco pero logro seguir adelante", score: 1 },
+                    { value: "c", text: "Me desaniman mucho y me cuesta recuperarme", score: 0 }
+                ]
+            }
+        ];
+
+        // Test State
+        let currentQuestionIndex = 0;
+        let testAnswers = [];
+        let timeLeft = 360; // 6 minutes
+        let timer;
+
+        // Persistent timer initialization
+        function initializeTimer() {
+            const now = new Date().getTime();
+            const storedStartTime = localStorage.getItem('timerStartTime');
+            const storedLastVisit = localStorage.getItem('lastVisitTime');
+            
+            // Check if it's been more than 5 days since last visit
+            const fiveDaysInMs = 5 * 24 * 60 * 60 * 1000;
+            
+            if (!storedStartTime || !storedLastVisit || (now - parseInt(storedLastVisit)) > fiveDaysInMs) {
+                // Reset timer - new session or 5+ days without visiting
+                localStorage.setItem('timerStartTime', now.toString());
+                localStorage.setItem('lastVisitTime', now.toString());
+                timeLeft = 360; // Reset to 6 minutes
+            } else {
+                // Continue from where we left off
+                const startTime = parseInt(storedStartTime);
+                const elapsedMs = now - startTime;
+                const elapsedSeconds = Math.floor(elapsedMs / 1000);
+                timeLeft = Math.max(0, 360 - elapsedSeconds);
+                localStorage.setItem('lastVisitTime', now.toString());
+            }
+        }
+
+        // Countdown timer
+        const countdownElement = document.getElementById('countdown');
+        
+        function startTimer() {
+            timer = setInterval(() => {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                countdownElement.textContent = `⏰ Tiempo limitado: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} minutos restantes`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    countdownElement.textContent = '⏰ Tiempo agotado';
+                    countdownElement.style.background = 'rgba(128, 128, 128, 0.8)';
+                    closeTestPopup();
+                }
+                timeLeft--;
+            }, 1000);
+        }
+
+        // Initialize timer and start
+        initializeTimer();
+        startTimer();
+
+        // Modal Functions
+        function openTestPopup() {
+            const modal = document.getElementById('testModal');
+            modal.style.display = 'flex';
+            currentQuestionIndex = 0;
+            testAnswers = [];
+            showQuestion(currentQuestionIndex);
+        }
+
+        function closeTestPopup() {
+            const modal = document.getElementById('testModal');
+            modal.style.display = 'none';
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestionIndex + 1) / 8) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
+        }
+
+        function showQuestion(index) {
+            updateProgress();
+            
+            if (index < testQuestions.length) {
+                const question = testQuestions[index];
+                const modalContent = document.getElementById('modalContent');
+                
+                modalContent.innerHTML = `
+                    <div class="question-container">
+                        <h3 class="question-title-modal">
+                            <span class="question-number-modal">${question.id}.</span>
+                            ${question.question}
+                        </h3>
+                        <div class="options-modal">
+                            ${question.options.map(option => `
+                                <div class="option-modal" onclick="selectOption(${index}, '${option.value}', ${option.score})">
+                                    ${option.text}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            } else {
+                showUserDataForm();
+            }
+        }
+
+        function selectOption(questionIndex, value, score) {
+            // Clear previous selections
+            document.querySelectorAll('.option-modal').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Mark current selection
+            event.target.classList.add('selected');
+            
+            // Store answer
+            testAnswers[questionIndex] = { value, score };
+            
+            // Auto advance after selection
+            setTimeout(() => {
+                currentQuestionIndex++;
+                showQuestion(currentQuestionIndex);
+            }, 800);
+        }
+
+        function showUserDataForm() {
+            const modalContent = document.getElementById('modalContent');
+            modalContent.innerHTML = `
+                <div class="form-container">
+                    <h3 class="question-title-modal">
+                        <span class="question-number-modal">8.</span>
+                        Para completar tu evaluación, necesitamos tus datos de contacto
+                    </h3>
+                    <p style="color: #cccccc; font-size: 12px; margin-bottom: 20px; text-align: center; line-height: 1.4;">
+                        Tus datos serán utilizados con fines educativos y con la finalidad de tener contacto entre el profesional y el usuario.
+                    </p>
+                    <form id="userDataForm">
+                        <div class="form-group">
+                            <label class="form-label">Nombre *</label>
+                            <input type="text" class="form-input" name="nombre" required placeholder="Tu nombre completo">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Tu Correo *</label>
+                            <input type="email" class="form-input" name="correo" required placeholder="tu@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Numero de Telefono (WhatsApp) *</label>
+                            <input type="tel" class="form-input" name="whatsapp" required placeholder="+57 300 123 4567">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Tu País de Residencia *</label>
+                            <input type="text" class="form-input" name="pais" required placeholder="Tu país de residencia">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Tu Objetivo *</label>
+                            <textarea class="form-input form-textarea" name="consulta" required placeholder="Cuéntanos brevemente por qué quieres generar $300+ semanales y qué esperas de este programa..."></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">
+                            ENVIAR EVALUACIÓN Y VER RESULTADOS
+                        </button>
+                        <p style="color: #999; font-size: 11px; margin-top: 15px; text-align: center; line-height: 1.3;">
+                            Los datos se eliminarán después de 12 meses.
+                        </p>
+                    </form>
+                </div>
+            `;
+
+            // Handle form submission
+            document.getElementById('userDataForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                submitEvaluation();
+            });
+        }
+
+        function submitEvaluation() {
+            const formData = new FormData(document.getElementById('userDataForm'));
+            const userData = {
+                nombre: formData.get('nombre'),
+                correo: formData.get('correo'),
+                whatsapp: formData.get('whatsapp'),
+                pais: formData.get('pais'),
+                consulta: formData.get('consulta')
+            };
+
+            // Calculate total score
+            const totalScore = testAnswers.reduce((sum, answer) => sum + (answer ? answer.score : 0), 0);
+            const maxScore = testQuestions.length * 2;
+            const percentage = (totalScore / maxScore) * 100;
+
+            // Store user data for later use
+            sessionStorage.setItem('userData', JSON.stringify(userData));
+            sessionStorage.setItem('testScore', totalScore);
+
+            // Send email with form data
+            sendTestDataEmail(userData, testAnswers, totalScore);
+
+            // Close modal and show results
+            closeTestPopup();
+            
+            // Show results based on score
+            if (percentage >= 70) {
+                showApprovalPage(userData, totalScore);
+            } else if (percentage >= 50) {
+                showPotentialPage(userData, totalScore);
+            } else {
+                showNotReadyPage(userData, totalScore);
+            }
+        }
+
+        function showApprovalPage(userData, score) {
+            // Generate dynamic date and countdown (auto-detect country/timezone)
+            const now = new Date();
+            const userLocale = navigator.language || 'es-ES';
+            const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            
+            const today = now.toLocaleDateString(userLocale, { 
+                weekday: 'long', 
+                day: 'numeric', 
+                month: 'short', 
+                year: 'numeric',
+                timeZone: timeZone
+            });
+            
+            const timeString = "22:00";
+
+            const approvalHTML = `
+                <div style="background: rgba(0,0,0,0.95); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 15px; overflow-y: auto;">
+                    <!-- Live Session Banner -->
+                    <div style="position: fixed; top: 0; left: 0; right: 0; background: linear-gradient(90deg, #ff0000 0%, #ff4444 100%, #ff0000 100%); color: white; padding: 10px; text-align: center; z-index: 2001; font-size: 12px; font-weight: bold; box-shadow: 0 2px 15px rgba(255, 0, 0, 0.5); animation: urgencyPulse 2s infinite;">
+                        🔥 CAPACITACIÓN OBLIGATORIA - PARTICIPA EN VIVO HOY ${today.toUpperCase()} 🔥
+                        <div style="margin-top: 5px; font-size: 10px; color: #ffff00; font-weight: normal;">
+                            ⚠️ WEBINAR EXCLUSIVO - APRENDE A FACTURAR MÍNIMO 300$ SEMANALES ⚠️
+                        </div>
+                        <div id="liveCountdown" style="margin-top: 5px; font-size: 14px; color: #ffff00; font-weight: bold; text-shadow: 0 0 10px rgba(255, 255, 0, 0.8);"></div>
+                    </div>
+                    <style>
+                        @keyframes urgencyPulse {
+                            0%, 100% { 
+                                background: linear-gradient(90deg, #ff0000 0%, #ff4444 50%, #ff0000 100%);
+                                box-shadow: 0 2px 15px rgba(255, 0, 0, 0.5);
+                            }
+                            50% { 
+                                background: linear-gradient(90deg, #ff4444 0%, #ff0000 50%, #ff4444 100%);
+                                box-shadow: 0 2px 20px rgba(255, 0, 0, 0.8);
+                            }
+                        }
+                        @keyframes urgentBlink {
+                            0%, 50% { opacity: 1; transform: scale(1); }
+                            25%, 75% { opacity: 0.7; transform: scale(1.1); }
+                        }
+                    </style>
+                    <div style="background: #1a1a1a; border-radius: 12px; padding: 20px; text-align: center; max-width: 450px; width: 100%; border: 2px solid #00ff00; margin: 70px 10px 10px 10px;">
+                        <div style="font-size: 40px; margin-bottom: 15px;">🎉</div>
+                        <h2 style="color: #00ff00; font-size: 24px; margin-bottom: 10px;">¡FELICIDADES ${userData.nombre.split(' ')[0].toUpperCase()}!</h2>
+                        <p style="color: #ffffff; font-size: 16px; margin-bottom: 20px;">
+                            Has sido <span style="color: #00ff00; font-weight: bold;">APROBADO/A</span> para participar en el
+                        </p>
+                        
+                        <div style="background: linear-gradient(45deg, #9D4EDD, #6A1B9A); border-radius: 12px; padding: 20px; margin: 20px 0; border: 2px solid #ffff00;">
+                            <h3 style="color: #ffff00; font-size: 18px; margin-bottom: 15px; text-shadow: 0 0 10px rgba(255, 255, 0, 0.8);">
+                                🎯 WEBINAR EXCLUSIVO 🎯
+                            </h3>
+                            <p style="color: #ffffff; font-size: 16px; font-weight: bold; margin-bottom: 10px;">
+                                "Participa <span style="color: #ffff00;">EN VIVO YA!</span> y aprende a facturar mínimo 
+                                <span style="color: #00ff00;">300$ semanales GARANTIZADO</span>"
+                            </p>
+                            <p style="color: #cccccc; font-size: 14px; margin-bottom: 15px;">
+                                Vendiendo más de <span style="color: #ffff00; font-weight: bold; text-shadow: 0 0 10px rgba(255, 255, 0, 0.7); font-size: 16px;">1,500 Productos Digitales</span>
+                                a través de una plataforma profesional
+                            </p>
+                            
+                            <div style="background: rgba(0, 0, 0, 0.3); border-radius: 8px; padding: 15px; margin: 15px 0;">
+                                <p style="color: #ffff00; font-size: 13px; font-weight: bold; margin-bottom: 10px;">
+                                    📋 CAPACITACIÓN OBLIGATORIA PARA 30 PERSONAS
+                                </p>
+                                <p style="color: #ffffff; font-size: 12px; line-height: 1.4;">
+                                    Interesadas en ingresar al equipo de vendedores profesionales para comenzar 
+                                    a generar ingresos <span style="color: #00ff00;">HOY MISMO</span> comercializando 
+                                    productos digitales de alta demanda.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div style="background: rgba(255, 255, 0, 0.08); border-radius: 8px; padding: 15px; margin: 15px 0;">
+                            <h4 style="color: #ffff00; font-size: 14px; margin-bottom: 10px;">✅ LO QUE APRENDERÁS:</h4>
+                            <div style="text-align: left; color: #cccccc; font-size: 12px; line-height: 1.6;">
+                                • Cómo generar <span style="color: #00ff00;">300$ semanales garantizados</span><br>
+                                • Acceso a plataforma con <span style="color: #9D4EDD;">+1,500 productos</span> <span style="color: #00ff00; font-weight: bold;">PARA TODA LA VIDA</span><br>
+                                • Estrategias de venta que realmente funcionan<br>
+                                • Sistema automatizado de comisiones<br>
+                                • Soporte y mentoría personalizada <span style="color: #00ff00; font-weight: bold;">PARA TODA LA VIDA</span><br>
+                                • Herramientas profesionales incluidas
+                            </div>
+                        </div>
+
+                        <div style="background: rgba(255, 0, 0, 0.1); border: 1px solid #ff4444; border-radius: 8px; padding: 12px; margin: 15px 0;">
+                            <p style="color: #ff4444; font-size: 12px; font-weight: bold; margin: 0;">
+                                ⚠️ IMPORTANTE: Únete a nuestra comunidad VIP para recibir el enlace del webinar
+                            </p>
+                        </div>
+
+                        <button onclick="window.open('https://chat.whatsapp.com/CumNDaB0EkD2oKgT2ofuG8', '_blank')" style="background: linear-gradient(45deg, #25D366, #128C7E); color: white; border: none; padding: 16px 25px; font-size: 16px; font-weight: bold; border-radius: 25px; cursor: pointer; margin-bottom: 15px; width: 100%; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); transition: all 0.3s ease;">
+                            📱 UNIRME A LA COMUNIDAD VIP
+                        </button>
+                        
+                        <p style="color: #ffff00; font-size: 11px; margin: 0; padding: 0 10px; line-height: 1.3;">
+                            🎯 Recibirás el enlace del webinar inmediatamente en WhatsApp<br>
+                            ⏰ Solo 30 cupos disponibles - ¡No pierdas tu lugar!
+                        </p>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', approvalHTML);
+            
+            // Initialize live session countdown
+            initializeLiveCountdown();
+            
+            // Start notifications for approval page
+            startApprovalPageNotifications();
+        }
+
+        function showPotentialPage(userData, score) {
+            const potentialHTML = `
+                <div style="background: rgba(0,0,0,0.95); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 20px;">
+                    <div style="background: #1a1a1a; border-radius: 15px; padding: 30px; text-align: center; max-width: 400px; width: 100%; border: 2px solid #ffff00;">
+                        <div style="font-size: 40px; margin-bottom: 15px;">⚡</div>
+                        <h2 style="color: #ffff00; font-size: 24px; margin-bottom: 10px;">TIENES POTENCIAL ${userData.nombre.split(' ')[0].toUpperCase()}</h2>
+                        <p style="color: #ffffff; font-size: 16px; margin-bottom: 20px;">
+                            Tu puntuación: <span style="color: #ffff00; font-weight: bold;">${score}/${testQuestions.length * 2}</span>
+                        </p>
+                        
+                        <div style="background: rgba(255, 255, 0, 0.1); border-radius: 8px; padding: 15px; margin: 15px 0;">
+                            <p style="color: #ffffff; font-size: 14px; margin-bottom: 15px;">
+                                Con la <span style="color: #ffff00; font-weight: bold;">orientación personalizada correcta</span> 
+                                puedes generar tus primeros <span style="color: #00ff00;">300$ semanales</span>
+                            </p>
+                            <p style="color: #cccccc; font-size: 12px;">
+                                Únete a nuestra comunidad VIP para recibir el webinar 
+                                exclusivo y la mentoría que necesitas
+                            </p>
+                        </div>
+
+                        <button onclick="window.open('https://chat.whatsapp.com/CumNDaB0EkD2oKgT2ofuG8', '_blank')" style="background: linear-gradient(45deg, #25D366, #128C7E); color: white; border: none; padding: 15px 25px; font-size: 16px; font-weight: bold; border-radius: 25px; cursor: pointer; width: 100%; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);">
+                            📱 RECIBIR ORIENTACIÓN VIP
+                        </button>
+                        
+                        <p style="color: #ffff00; font-size: 11px; margin-top: 10px;">
+                            ✅ Recibirás el enlace del webinar exclusivo en WhatsApp
+                        </p>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', potentialHTML);
+        }
+
+        function showNotReadyPage(userData, score) {
+            const notReadyHTML = `
+                <div style="background: rgba(0,0,0,0.95); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 20px;">
+                    <div style="background: #1a1a1a; border-radius: 15px; padding: 30px; text-align: center; max-width: 400px; width: 100%; border: 2px solid #ff9500;">
+                        <div style="font-size: 40px; margin-bottom: 15px;">🎯</div>
+                        <h2 style="color: #ff9500; font-size: 24px; margin-bottom: 10px;">NECESITAS PREPARACIÓN ${userData.nombre.split(' ')[0].toUpperCase()}</h2>
+                        <p style="color: #ffffff; font-size: 16px; margin-bottom: 20px;">
+                            Tu puntuación: <span style="color: #ff9500; font-weight: bold;">${score}/${testQuestions.length * 2}</span>
+                        </p>
+                        
+                        <div style="background: rgba(255, 149, 0, 0.1); border-radius: 8px; padding: 15px; margin: 15px 0;">
+                            <p style="color: #ffffff; font-size: 14px; margin-bottom: 15px;">
+                                <span style="color: #ff9500; font-weight: bold;">¡No te preocupes!</span> 
+                                Todos empezaron desde cero. Con la mentoría correcta 
+                                puedes estar listo para generar <span style="color: #00ff00;">300$ semanales</span>
+                            </p>
+                            <p style="color: #cccccc; font-size: 12px;">
+                                Únete a nuestra comunidad para recibir capacitación 
+                                previa y prepararte para el webinar principal
+                            </p>
+                        </div>
+
+                        <button onclick="window.open('https://chat.whatsapp.com/CumNDaB0EkD2oKgT2ofuG8', '_blank')" style="background: linear-gradient(45deg, #25D366, #128C7E); color: white; border: none; padding: 15px 25px; font-size: 16px; font-weight: bold; border-radius: 25px; cursor: pointer; width: 100%; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); margin-bottom: 10px;">
+                            📱 RECIBIR PREPARACIÓN VIP
+                        </button>
+                        
+                        <button onclick="location.reload()" style="background: #666; color: white; border: none; padding: 12px 25px; font-size: 14px; font-weight: bold; border-radius: 20px; cursor: pointer; width: 100%;">
+                            🔄 VOLVER A INTENTAR EL TEST
+                        </button>
+                        
+                        <p style="color: #ff9500; font-size: 11px; margin-top: 10px;">
+                            ✅ Recibirás capacitación previa personalizada en WhatsApp
+                        </p>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', notReadyHTML);
+        }
+
+        // Accordion functionality
+        function toggleAccordion(index) {
+            // Close all accordion items first
+            for (let i = 1; i <= 6; i++) {
+                const content = document.getElementById(`content${i}`);
+                const icon = document.getElementById(`icon${i}`);
+                if (content && icon) {
+                    content.style.display = 'none';
+                    icon.textContent = '+';
+                }
+            }
+            
+            // Open the clicked item
+            const content = document.getElementById(`content${index}`);
+            const icon = document.getElementById(`icon${index}`);
+            
+            if (content && icon) {
+                content.style.display = 'block';
+                icon.textContent = '-';
+            }
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('testModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeTestPopup();
+            }
+        });
+
+        // Floating Notifications Data (85 different notifications)
+        const floatingNotifications = [
+            { name: "María G.", message: "🎯 Aprobada como vendedora en Hotmart, primera semana $347", amount: "$347", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Carlos R.", message: "💰 Vendiendo productos digitales, ya supero mi salario", amount: "$892", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Ana L.", message: "🚀 Comercializando desde casa, libertad total", amount: "$1,240", stars: "⭐⭐⭐⭐⭐" },
+            { name: "José M.", message: "✅ Vendedor certificado, ingresos automáticos diarios", amount: "$2,150", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Laura S.", message: "📱 Vendiendo por WhatsApp, ya renuncié a mi empleo", amount: "$580", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Roberto C.", message: "🎉 Afiliado Hotmart nivel PRO, comisiones diarias", amount: "$1,675", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Carmen F.", message: "💻 Vendiendo cursos online, trabajo desde casa", amount: "$425", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Miguel A.", message: "🔥 Marketing digital efectivo, supero mi salario", amount: "$3,200", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Sofía P.", message: "📈 Estrategias que funcionan, resultados reales", amount: "$1,950", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Daniel V.", message: "⚡ Vendedor top en Hotmart, ingresos constantes", amount: "$2,840", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Gabriela H.", message: "💎 Primera venta en 48 horas, sistema comprobado", amount: "$315", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Fernando K.", message: "🎯 Productos de alta conversión, ventas constantes", amount: "$1,485", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Valeria O.", message: "📊 Métricas increíbles, cada día facturo más", amount: "$750", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Alejandro N.", message: "🏆 Top seller Hotmart, libertad financiera real", amount: "$2,670", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Isabella T.", message: "💰 Comisiones automáticas, trabajo 2 horas diarias", amount: "$920", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Ricardo J.", message: "Entré a la comunidad, mejor decisión de mi vida", amount: "$1,380", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Natalia B.", message: "Me capacité y compré mi primer auto", amount: "$4,200", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Eduardo G.", message: "Aprobado en el negocio, genero ingresos automáticos", amount: "$1,650", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Camila R.", message: "Entré a la capacitación y duplicé mis ingresos", amount: "$2,980", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Andrés M.", message: "Aprobado en la comunidad, cada día genero más", amount: "$540", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Paola D.", message: "Me capacité y ahora ayudo a mi familia", amount: "$1,750", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Sebastián L.", message: "Entré al negocio y genero ingresos diarios", amount: "$3,850", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Mónica W.", message: "Aprobada en la comunidad, libertad financiera", amount: "$2,460", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Cristian P.", message: "Me capacité y genero ingresos automáticos", amount: "$680", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Diana F.", message: "Entré al negocio y mis ingresos crecen diario", amount: "$1,920", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Julián S.", message: "Ya tengo mi propio negocio", amount: "$3,150", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Fernanda C.", message: "Todo cambió desde que entré aquí", amount: "$1,240", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Emilio R.", message: "Mis ingresos se multiplicaron", amount: "$2,730", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Victoria H.", message: "Ya no tengo preocupaciones económicas", amount: "$1,880", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Óscar T.", message: "20 ventas este mes", amount: "$4,680", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Mariana J.", message: "Estoy construyendo mi futuro", amount: "$1,350", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Raúl B.", message: "Cada día aprendo y gano más", amount: "$890", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Lucia K.", message: "Ya puedo viajar cuando quiera", amount: "$3,420", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Gustavo N.", message: "Mi esposa ya no trabaja", amount: "$2,950", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Adriana V.", message: "Compré la casa de mis sueños", amount: "$5,200", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Iván O.", message: "Trabajo desde la playa", amount: "$1,780", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Constanza M.", message: "Mi familia ya no pasa necesidades", amount: "$2,340", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Nicolás D.", message: "25 ventas en 2 semanas", amount: "$6,250", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Beatriz L.", message: "Ya soy mi propia jefa", amount: "$1,650", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Mauricio G.", message: "Esto superó todas mis expectativas", amount: "$3,780", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Alexa P.", message: "Mi cuenta de ahorros crece diario", amount: "$2,180", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Tomás F.", message: "Ya no vivo de cheque en cheque", amount: "$1,940", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Jazmín S.", message: "Compré mi primer departamento", amount: "$4,850", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Álvaro C.", message: "Mis hijos ya tienen universidad asegurada", amount: "$3,650", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Romina H.", message: "30 ventas este mes", amount: "$7,200", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Esteban R.", message: "Ya tengo libertad de tiempo", amount: "$2,480", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Carla T.", message: "Mi vida dio un giro de 180°", amount: "$1,720", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Mateo J.", message: "Cada venta es un paso más cerca de mis sueños", amount: "$950", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Paloma B.", message: "Ya puedo darme todos los gustos", amount: "$3,280", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Lorenzo K.", message: "Mi negocio crece exponencialmente", amount: "$4,150", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Valentina N.", message: "Trabajo 3 horas y gano más que antes", amount: "$2,750", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Héctor V.", message: "Ya invertí en otros negocios", amount: "$5,680", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Abril O.", message: "Mi familia me admira por el cambio", amount: "$1,980", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Patricio M.", message: "35 ventas en 3 semanas", amount: "$8,400", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Celeste D.", message: "Ya tengo mi propio equipo de trabajo", amount: "$6,200", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Ignacio L.", message: "Esto cambió mi mentalidad para siempre", amount: "$3,450", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Renata G.", message: "Ya no tengo deudas", amount: "$2,850", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Marcos P.", message: "Mi esposa dejó de trabajar", amount: "$4,720", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Celina F.", message: "Cada mes es mejor que el anterior", amount: "$3,190", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Bruno S.", message: "Ya compré mi segundo auto", amount: "$5,850", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Delfina C.", message: "40 ventas este mes", amount: "$9,600", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Agustín H.", message: "Mi vida es completamente diferente", amount: "$3,680", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Florencia R.", message: "Ya tengo múltiples fuentes de ingreso", amount: "$7,250", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Leandro T.", message: "Mis padres están súper orgullosos", amount: "$2,440", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Milagros J.", message: "Ya abrí mi segunda empresa", amount: "$8,900", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Damián B.", message: "Trabajo desde cualquier lugar del mundo", amount: "$4,380", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Aitana K.", message: "Mi cuenta de banco nunca había estado tan llena", amount: "$6,750", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Santino N.", message: "45 ventas en un mes", amount: "$10,800", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Amelia V.", message: "Ya construí mi casa propia", amount: "$12,500", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Benjamín O.", message: "Mi libertad financiera es real", amount: "$5,920", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Catalina M.", message: "Cada día es una nueva oportunidad", amount: "$3,740", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Thiago D.", message: "Ya invertí en bienes raíces", amount: "$15,200", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Julieta L.", message: "Mi negocio genera ingresos pasivos", amount: "$8,650", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Lautaro G.", message: "50 ventas en 6 semanas", amount: "$12,000", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Miranda P.", message: "Ya tengo mi consultora propia", amount: "$9,480", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Joaquín F.", message: "Mis ingresos son de 6 cifras", amount: "$18,750", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Amparo S.", message: "Ya puedo mantener a toda mi familia", amount: "$7,320", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Gaspar C.", message: "Esto superó mis sueños más locos", amount: "$11,200", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Esperanza H.", message: "Mi vida es exactamente como la soñé", amount: "$6,890", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Valentín R.", message: "60 ventas en 2 meses", amount: "$14,400", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Jaime T.", message: "Ya soy mentor de otros emprendedores", amount: "$13,650", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Noa J.", message: "Mi empresa ya tiene empleados", amount: "$22,800", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Ciro B.", message: "Cada mes rompo mis propios récords", amount: "$16,750", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Zoe K.", message: "Ya compré mi casa en la playa", amount: "$28,500", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Bautista N.", message: "75 ventas en 3 meses", amount: "$18,000", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Alma V.", message: "Mi éxito inspira a otros", amount: "$19,200", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Gael O.", message: "Ya tengo múltiples negocios", amount: "$32,400", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Pilar M.", message: "Mi historia es de película", amount: "$25,600", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Ian D.", message: "100 ventas en 4 meses", amount: "$24,000", stars: "⭐⭐⭐⭐⭐" }
+        ];
+
+        let notificationIndex = 0;
+        let notificationTimer;
+        let isPageActive = true;
+
+        // Show floating notification
+        function showFloatingNotification() {
+            if (!isPageActive) return;
+            
+            const notification = floatingNotifications[notificationIndex % floatingNotifications.length];
+            
+            const notificationEl = document.createElement('div');
+            notificationEl.className = 'floating-notification';
+            
+            notificationEl.innerHTML = `
+                <div class="notification-header">
+                    <div class="notification-avatar">${notification.name.charAt(0)}</div>
+                    <div class="notification-name">${notification.name}</div>
+                    <div class="notification-stars">${notification.stars}</div>
+                </div>
+                <div class="notification-message">${notification.message}</div>
+                <div class="notification-amount">${notification.amount}</div>
+            `;
+            
+            document.body.appendChild(notificationEl);
+            
+            // Remove notification after 5 seconds
+            setTimeout(() => {
+                if (notificationEl.parentNode) {
+                    notificationEl.parentNode.removeChild(notificationEl);
+                }
+            }, 5000);
+            
+            notificationIndex++;
+        }
+
+        // Start floating notifications
+        function startFloatingNotifications() {
+            if (notificationTimer) clearInterval(notificationTimer);
+            
+            // Show first notification immediately
+            setTimeout(showFloatingNotification, 2000);
+            
+            // Then show every 15 seconds
+            notificationTimer = setInterval(showFloatingNotification, 15000);
+        }
+
+        // Stop floating notifications
+        function stopFloatingNotifications() {
+            if (notificationTimer) {
+                clearInterval(notificationTimer);
+                notificationTimer = null;
+            }
+        }
+
+        // Track page visibility
+        document.addEventListener('visibilitychange', function() {
+            isPageActive = !document.hidden;
+            if (isPageActive) {
+                startFloatingNotifications();
+            } else {
+                stopFloatingNotifications();
+            }
+        });
+
+        // Start notifications when page loads
+        startFloatingNotifications();
+
+        // Cookie Banner Management
+        function showCookieBanner() {
+            const cookieConsent = localStorage.getItem('cookieConsent');
+            if (!cookieConsent) {
+                document.getElementById('cookieBanner').style.display = 'block';
+            }
+        }
+
+        function acceptCookies() {
+            // Set cookie consent to never expire (permanent)
+            localStorage.setItem('cookieConsent', 'accepted');
+            document.getElementById('cookieBanner').style.display = 'none';
+        }
+
+        // Show cookie banner when page loads
+        window.addEventListener('load', function() {
+            setTimeout(showCookieBanner, 1000); // Show after 1 second
+            updateSocialProofNumbers(); // Update social proof numbers
+        });
+
+        // Static Social Proof Numbers (always shows 6.000)
+        function updateSocialProofNumbers() {
+            // Keep fixed number as requested
+            const fixedSellers = '6.000';
+            
+            // Update the social proof text with fixed number
+            const socialProofElement = document.getElementById('socialProof');
+            if (socialProofElement) {
+                socialProofElement.innerHTML = `🚀 Ya somos más de ${fixedSellers} Vendedores en Hotmart®️ 📈`;
+            }
+        }
+
+        // Send Test Data via Email (Python API + mailto backup)
+        function sendTestDataEmail(userData, testAnswers, totalScore) {
+            // Preparar datos para el API de Python
+            const emailData = {
+                name: userData.nombre,
+                user_email: userData.correo,
+                phone: userData.whatsapp,
+                country: userData.pais,
+                objective: userData.consulta,
+                score: totalScore.toString(),
+                total_questions: testQuestions.length.toString(),
+                answers: JSON.stringify(testAnswers.map((answer, index) => ({
+                    question_number: index + 1,
+                    question: testQuestions[index].question,
+                    selected_value: answer.value,
+                    selected_text: testQuestions[index].options.find(opt => opt.value === answer.value)?.text || 'No encontrada',
+                    score: answer.score
+                })))
+            };
+
+            // Intentar enviar al servidor Python primero
+            const pythonAPIUrl = 'http://localhost:5000/send-test-data'; // Cambiar por URL de producción
+            
+            fetch(pythonAPIUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(emailData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('✅ Email enviado vía Python API:', data);
+                // Mostrar confirmación visual al usuario (opcional)
+                showEmailConfirmation(true);
+            })
+            .catch(error => {
+                console.warn('⚠️ Python API no disponible, usando mailto como respaldo:', error);
+                // Fallback al método mailto
+                sendViaMailto(userData, testAnswers, totalScore);
+            });
+        }
+
+        function sendViaMailto(userData, testAnswers, totalScore) {
+            const emailBody = `
+Test de Evaluación - ACCESO Blacks.University
+
+DATOS DEL USUARIO:
+==================
+Nombre: ${userData.nombre}
+Correo: ${userData.correo}  
+Teléfono (WhatsApp): ${userData.whatsapp}
+País de Residencia: ${userData.pais}
+Objetivo: ${userData.consulta}
+
+PUNTUACIÓN DEL TEST:
+===================
+Puntuación Total: ${totalScore}/${testQuestions.length * 2} puntos
+Porcentaje: ${Math.round((totalScore / (testQuestions.length * 2)) * 100)}%
+
+RESPUESTAS DETALLADAS:
+=====================
+${testAnswers.map((answer, index) => {
+    const question = testQuestions[index];
+    const selectedOption = question.options.find(opt => opt.value === answer.value);
+    return `${index + 1}. ${question.question}
+   Respuesta: ${selectedOption ? selectedOption.text : 'No respondida'} (${answer.score} puntos)`;
+}).join('\n\n')}
+
+FECHA Y HORA:
+=============
+${new Date().toLocaleString('es-ES', { timeZone: 'America/Bogota' })} (Hora Colombia)
+            `.trim();
+
+            // Create mailto link
+            const subject = "EVALUACION – Webinar BlacksU – Mauricio Duque.";
+            const mailto = `mailto:hristiankrasimirov7@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}`;
+            
+            // Try to open email client
+            try {
+                const emailWindow = window.open(mailto, '_blank');
+                // If popup blocked, create a backup form submission
+                if (!emailWindow) {
+                    createBackupEmailForm(userData, testAnswers, totalScore);
+                }
+                showEmailConfirmation(false);
+            } catch (error) {
+                // Fallback if mailto fails
+                createBackupEmailForm(userData, testAnswers, totalScore);
+            }
+        }
+
+        function showEmailConfirmation(viaPython) {
+            // Mostrar confirmación visual (opcional)
+            const method = viaPython ? 'automático' : 'manual';
+            console.log(`📧 Email preparado para envío ${method} a hristiankrasimirov7@gmail.com`);
+            console.log(`📨 Asunto: EVALUACION – Webinar BlacksU – Mauricio Duque.`);
+        }
+
+        function createBackupEmailForm(userData, testAnswers, totalScore) {
+            // Create hidden form for backup submission
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = 'https://formspree.io/f/xpzvgdpj'; // You'll need to set up Formspree
+            form.style.display = 'none';
+
+            const fields = {
+                email: 'hristiankrasimirov7@gmail.com',
+                subject: 'EVALUACION – Webinar BlacksU – Mauricio Duque.',
+                name: userData.nombre,
+                user_email: userData.correo,
+                phone: userData.whatsapp,
+                country: userData.pais,
+                objective: userData.consulta,
+                score: `${totalScore}/${testQuestions.length * 2}`,
+                answers: JSON.stringify(testAnswers)
+            };
+
+            for (const [key, value] of Object.entries(fields)) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = value;
+                form.appendChild(input);
+            }
+
+            document.body.appendChild(form);
+            form.submit();
+            document.body.removeChild(form);
+        }
+
+        // Auto-update legal pages every 3 months
+        function updateLegalPagesAutomatically() {
+            const baseDate = new Date('2025-01-01'); // Starting date
+            const currentDate = new Date();
+            const daysDiff = Math.floor((currentDate - baseDate) / (1000 * 60 * 60 * 24));
+            const periodsOf90Days = Math.floor(daysDiff / 90); // Every 3 months (90 days)
+            
+            // Calculate the current update date
+            const updateDate = new Date(baseDate);
+            updateDate.setDate(updateDate.getDate() + (periodsOf90Days * 90));
+            
+            // Store the current period for automatic updates
+            localStorage.setItem('legalPagesUpdatePeriod', periodsOf90Days.toString());
+            localStorage.setItem('legalPagesLastUpdate', updateDate.toISOString());
+            
+            // Update date display in legal pages (for automatic date refresh)
+            const formattedDate = updateDate.toLocaleDateString('es-ES', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+            
+            // Store current formatted date for legal pages
+            localStorage.setItem('currentLegalDate', formattedDate);
+        }
+
+        // Initialize legal pages auto-update when page loads
+        updateLegalPagesAutomatically();
+
+        // Live Session Countdown Management
+        function initializeLiveCountdown() {
+            const now = new Date().getTime();
+            const storedLiveStartTime = localStorage.getItem('liveCountdownStartTime');
+            const storedLiveLastVisit = localStorage.getItem('liveCountdownLastVisit');
+            
+            // Check if it's been more than 3 days since last visit
+            const threeDaysInMs = 3 * 24 * 60 * 60 * 1000;
+            let liveTimeLeft = 360; // 6 minutes in seconds
+            
+            if (!storedLiveStartTime || !storedLiveLastVisit || (now - parseInt(storedLiveLastVisit)) > threeDaysInMs) {
+                // Reset timer - new session or 3+ days without visiting
+                localStorage.setItem('liveCountdownStartTime', now.toString());
+                localStorage.setItem('liveCountdownLastVisit', now.toString());
+                liveTimeLeft = 360; // Reset to 6 minutes
+            } else {
+                // Continue from where we left off
+                const startTime = parseInt(storedLiveStartTime);
+                const elapsedMs = now - startTime;
+                const elapsedSeconds = Math.floor(elapsedMs / 1000);
+                liveTimeLeft = Math.max(0, 360 - elapsedSeconds);
+                localStorage.setItem('liveCountdownLastVisit', now.toString());
+            }
+
+            startLiveCountdown(liveTimeLeft);
+        }
+
+                function startLiveCountdown(timeLeft) {
+            const countdownElement = document.getElementById('liveCountdown');
+            if (!countdownElement) return;
+
+            const liveTimer = setInterval(() => {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                
+                if (timeLeft > 0) {
+                    countdownElement.innerHTML = `⚡ QUEDAN: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} ⚡`;
+                    
+                    // Efecto visual de urgencia cuando quedan menos de 2 minutos
+                    if (timeLeft <= 120) {
+                        countdownElement.style.animation = 'urgentBlink 1s infinite';
+                        countdownElement.style.color = '#ff4444';
+                    }
+                } else {
+                    clearInterval(liveTimer);
+                    countdownElement.innerHTML = '🔴 INSCRIPCIONES CERRADAS';
+                    countdownElement.style.background = 'rgba(128, 128, 128, 0.8)';
+                    countdownElement.style.color = '#ffffff';
+                    countdownElement.style.padding = '5px 15px';
+                    countdownElement.style.borderRadius = '15px';
+                    countdownElement.style.animation = 'none';
+                }
+                timeLeft--;
+            }, 1000);
+        }
+
+        // Approval Page Notifications (specific for thanks page)
+        const approvalPageNotifications = [
+            { name: "Elena M.", message: "✅ Aprobada como vendedora, acceso total confirmado", amount: "✅ APROBADA", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Carlos V.", message: "🎯 Siguiendo el webinar, estrategias increíbles", amount: "🎓 EN VIVO", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Ana R.", message: "💰 Primera comisión en Hotmart, $85 en 2 días", amount: "🚀 VENDIENDO", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Luis G.", message: "📱 Catálogo completo descargado, listo para vender", amount: "🎯 CATÁLOGO", stars: "⭐⭐⭐⭐⭐" },
+            { name: "María P.", message: "👥 Grupo WhatsApp súper activo, apoyo total", amount: "💬 WHATSAPP", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Diego S.", message: "🎥 Biblioteca completa disponible, contenido gold", amount: "📹 BIBLIOTECA", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Carmen L.", message: "💼 Licencia de revendedora activada, 100% legal", amount: "💼 LICENCIA", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Roberto H.", message: "📦 Pack de productos listos, links de afiliado ok", amount: "📱 PRODUCTOS", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Sofia T.", message: "🎯 Primera sesión magistral, técnicas avanzadas", amount: "💻 CAPACITACIÓN", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Andrés K.", message: "📈 Panel de control activo, tracking de ventas", amount: "📊 DASHBOARD", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Lucia F.", message: "Configuré mi perfil en la plataforma", amount: "⚙️ PERFIL", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Miguel J.", message: "Acceso confirmado a Universidad.Online", amount: "🎯 ACCESO", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Isabella W.", message: "Ya estoy comercializando mi primer programa", amount: "💰 VENDIENDO", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Fernando B.", message: "Mi mentor me contactó por WhatsApp", amount: "📲 MENTOR", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Gabriela N.", message: "Descargué los materiales de Crafting", amount: "🎨 CRAFTING", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Joaquín C.", message: "Ya estoy en el grupo VIP de Telegram", amount: "💎 VIP", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Valentina R.", message: "Activé mi certificación como Closer", amount: "🏆 CLOSER", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Emilio D.", message: "Acceso completo a tráfico pago confirmado", amount: "🎯 TRÁFICO", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Camila A.", message: "Ya estoy usando las herramientas de IA", amount: "🤖 IA", stars: "⭐⭐⭐⭐⭐" },
+            { name: "Sebastián O.", message: "Mi primera venta como afiliado confirmada", amount: "✅ AFILIADO", stars: "⭐⭐⭐⭐⭐" }
+        ];
+
+        let approvalNotificationIndex = 0;
+        let approvalNotificationTimer;
+
+        function showApprovalPageNotification() {
+            const notification = approvalPageNotifications[approvalNotificationIndex % approvalPageNotifications.length];
+            
+            const notificationEl = document.createElement('div');
+            notificationEl.className = 'floating-notification';
+            notificationEl.style.zIndex = '2002'; // Higher than approval page modal
+            
+            notificationEl.innerHTML = `
+                <div class="notification-header">
+                    <div class="notification-avatar">${notification.name.charAt(0)}</div>
+                    <div class="notification-name">${notification.name}</div>
+                    <div class="notification-stars">${notification.stars}</div>
+                </div>
+                <div class="notification-message">${notification.message}</div>
+                <div class="notification-amount">${notification.amount}</div>
+            `;
+            
+            document.body.appendChild(notificationEl);
+            
+            // Remove notification after 5 seconds
+            setTimeout(() => {
+                if (notificationEl.parentNode) {
+                    notificationEl.parentNode.removeChild(notificationEl);
+                }
+            }, 5000);
+            
+            approvalNotificationIndex++;
+        }
+
+        function startApprovalPageNotifications() {
+            if (approvalNotificationTimer) clearInterval(approvalNotificationTimer);
+            
+            // Show first notification after 3 seconds
+            setTimeout(showApprovalPageNotification, 3000);
+            
+            // Then show every 15 seconds
+            approvalNotificationTimer = setInterval(showApprovalPageNotification, 15000);
+        }
+    </script>
+</body>
+</html> 
