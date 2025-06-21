@@ -642,21 +642,67 @@
 
          @media (max-width: 768px) {
              .floating-notification {
-                 left: 10px;
-                 max-width: 220px;
-                 padding: 8px 10px;
+                 left: 8px;
+                 max-width: 200px;
+                 padding: 6px 8px;
+                 font-size: 11px;
+             }
+             
+             .notification-avatar {
+                 width: 20px;
+                 height: 20px;
+                 font-size: 9px;
+                 margin-right: 6px;
              }
              
              .notification-name {
-                 font-size: 11px;
-             }
-             
-             .notification-message {
                  font-size: 10px;
              }
              
+             .notification-message {
+                 font-size: 9px;
+                 line-height: 1.2;
+             }
+             
              .notification-amount {
-                 font-size: 11px;
+                 font-size: 10px;
+             }
+             
+             .notification-stars {
+                 font-size: 9px;
+             }
+         }
+
+         @media (max-width: 480px) {
+             .floating-notification {
+                 left: 5px;
+                 max-width: 180px;
+                 padding: 5px 7px;
+                 font-size: 10px;
+             }
+             
+             .notification-avatar {
+                 width: 18px;
+                 height: 18px;
+                 font-size: 8px;
+                 margin-right: 5px;
+             }
+             
+             .notification-name {
+                 font-size: 9px;
+             }
+             
+             .notification-message {
+                 font-size: 8px;
+                 line-height: 1.1;
+             }
+             
+             .notification-amount {
+                 font-size: 9px;
+             }
+             
+             .notification-stars {
+                 font-size: 8px;
              }
          }
 
@@ -1457,11 +1503,11 @@
         function startFloatingNotifications() {
             if (notificationTimer) clearInterval(notificationTimer);
             
-            // Show first notification immediately
-            setTimeout(showFloatingNotification, 2000);
+            // Show first notification after 5 seconds
+            setTimeout(showFloatingNotification, 5000);
             
-            // Then show every 15 seconds
-            notificationTimer = setInterval(showFloatingNotification, 15000);
+            // Then show every 30 seconds (25 sec interval + 5 sec display = 30 sec total)
+            notificationTimer = setInterval(showFloatingNotification, 30000);
         }
 
         // Stop floating notifications
@@ -1517,7 +1563,7 @@
             }
         }
 
-        // Send Test Data via Email (Python API + mailto backup)
+        // Send Test Data via Email (Python API + mailto backup) - ENVÍO AUTOMÁTICO
         function sendTestDataEmail(userData, testAnswers, totalScore) {
             // Preparar datos para el API de Python
             const emailData = {
@@ -1537,9 +1583,10 @@
                 })))
             };
 
-            // Intentar enviar al servidor Python primero
+            // Intentar enviar al servidor Python primero (AUTOMÁTICO)
             const pythonAPIUrl = 'http://localhost:5000/send-test-data'; // Cambiar por URL de producción
             
+            // ENVÍO AUTOMÁTICO - Sin confirmación del usuario
             fetch(pythonAPIUrl, {
                 method: 'POST',
                 headers: {
@@ -1549,18 +1596,18 @@
             })
             .then(response => response.json())
             .then(data => {
-                console.log('✅ Email enviado vía Python API:', data);
-                // Mostrar confirmación visual al usuario (opcional)
+                console.log('✅ Email enviado automáticamente vía Python API:', data);
+                // Email enviado exitosamente de forma automática
                 showEmailConfirmation(true);
             })
             .catch(error => {
-                console.warn('⚠️ Python API no disponible, usando mailto como respaldo:', error);
-                // Fallback al método mailto
-                sendViaMailto(userData, testAnswers, totalScore);
+                console.warn('⚠️ Python API no disponible, enviando automáticamente vía respaldo:', error);
+                // Fallback al método automático también
+                sendViaMailtoAutomatic(userData, testAnswers, totalScore);
             });
         }
 
-        function sendViaMailto(userData, testAnswers, totalScore) {
+        function sendViaMailtoAutomatic(userData, testAnswers, totalScore) {
             const emailBody = `
 Test de Evaluación - ACCESO Blacks.University
 
@@ -1591,29 +1638,23 @@ FECHA Y HORA:
 ${new Date().toLocaleString('es-ES', { timeZone: 'America/Bogota' })} (Hora Colombia)
             `.trim();
 
-            // Create mailto link
+            // ENVÍO AUTOMÁTICO - Sin preguntar al usuario
             const subject = "EVALUACION – Webinar BlacksU – Mauricio Duque.";
-            const mailto = `mailto:hristiankrasimirov7@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}`;
             
-            // Try to open email client
-            try {
-                const emailWindow = window.open(mailto, '_blank');
-                // If popup blocked, create a backup form submission
-                if (!emailWindow) {
-                    createBackupEmailForm(userData, testAnswers, totalScore);
-                }
-                showEmailConfirmation(false);
-            } catch (error) {
-                // Fallback if mailto fails
-                createBackupEmailForm(userData, testAnswers, totalScore);
-            }
+            // Usar formulario automático en lugar de mailto (para evitar popup)
+            createBackupEmailForm(userData, testAnswers, totalScore);
+            showEmailConfirmation(false);
+            
+            // Marcar como enviado automáticamente
+            console.log('📧 Formulario enviado automáticamente sin confirmación del usuario');
         }
 
         function showEmailConfirmation(viaPython) {
-            // Mostrar confirmación visual (opcional)
-            const method = viaPython ? 'automático' : 'manual';
-            console.log(`📧 Email preparado para envío ${method} a hristiankrasimirov7@gmail.com`);
+            // Confirmación automática - Sin interacción del usuario
+            const method = viaPython ? 'automático vía API' : 'automático vía formulario';
+            console.log(`📧 Email enviado ${method} a hristiankrasimirov7@gmail.com`);
             console.log(`📨 Asunto: EVALUACION – Webinar BlacksU – Mauricio Duque.`);
+            console.log(`✅ ENVÍO COMPLETADO - Sin confirmación del usuario (como solicitado)`);
         }
 
         function createBackupEmailForm(userData, testAnswers, totalScore) {
@@ -1792,11 +1833,11 @@ ${new Date().toLocaleString('es-ES', { timeZone: 'America/Bogota' })} (Hora Colo
         function startApprovalPageNotifications() {
             if (approvalNotificationTimer) clearInterval(approvalNotificationTimer);
             
-            // Show first notification after 3 seconds
-            setTimeout(showApprovalPageNotification, 3000);
+            // Show first notification after 5 seconds
+            setTimeout(showApprovalPageNotification, 5000);
             
-            // Then show every 15 seconds
-            approvalNotificationTimer = setInterval(showApprovalPageNotification, 15000);
+            // Then show every 30 seconds (25 sec interval + 5 sec display = 30 sec total)
+            approvalNotificationTimer = setInterval(showApprovalPageNotification, 30000);
         }
     </script>
 </body>
