@@ -18,14 +18,14 @@ import pytz
 app = Flask(__name__)
 CORS(app)  # Permite requests desde cualquier dominio
 
-# Configuración del email
+# Configuración del email - ACTUALIZADA
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 587
-# Valores predeterminados para desarrollo local (no usar en producción)
-EMAIL_USER = os.getenv('EMAIL_USER', 'tu_email@gmail.com')  # Configurar en variables de entorno
-EMAIL_PASSWORD = os.getenv('EMAIL_PASSWORD', 'tu_app_password')  # App Password de Gmail
-DESTINATION_EMAIL = "hristiankrasimirov7@gmail.com"
-EMAIL_SUBJECT = "EVALUACION – Webinar BlacksU – Mauricio Duque."
+# Configuración con nuevas credenciales
+EMAIL_USER = os.getenv('EMAIL_USER', 'solucionesworld2016@gmail.com')
+EMAIL_PASSWORD = os.getenv('EMAIL_PASSWORD', 'jgtq ucny jpxc nyoy')  # App Password actualizado
+DESTINATION_EMAIL = os.getenv('DESTINATION_EMAIL', 'solucionesworld2016@gmail.com')  # Email de destino actualizado
+EMAIL_SUBJECT = os.getenv('EMAIL_SUBJECT', 'Webinar - BlacksU Gegenra min 300$ semanales con Hotmart')  # Asunto actualizado
 
 # Validar variables de entorno críticas
 def validate_environment():

@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ImpactoDigitalSPM - EVALUACION</title>
     <link rel="icon" type="image/png" href="IMG/LOGO PRINCIPAL.png">
-    <!-- Cargar archivo de configuración -->
+    <!-- Cargar archivos de configuración -->
     <script src="config.js"></script>
+    <script src="email_config.js"></script>
     <!-- Cargar Google Analytics -->
     <script src="scripts/analytics.js"></script>
     <style>
@@ -1141,16 +1142,33 @@
             // Send email with form data
             sendTestDataEmail(userData, testAnswers, totalScore);
 
+            // 📊 GOOGLE ANALYTICS - Trackear completación del test
+            if (typeof trackTestCompletion === 'function') {
+                trackTestCompletion(userData, totalScore, percentage);
+            }
+
             // Close modal and show results
             closeTestPopup();
             
             // Show results based on score
             if (percentage >= 70) {
                 showApprovalPage(userData, totalScore);
+                // 📊 Trackear conversión aprobada
+                if (typeof trackConversion === 'function') {
+                    trackConversion('approved_lead', 100, 'USD');
+                }
             } else if (percentage >= 50) {
                 showPotentialPage(userData, totalScore);
+                // 📊 Trackear lead potencial
+                if (typeof trackConversion === 'function') {
+                    trackConversion('potential_lead', 50, 'USD');
+                }
             } else {
                 showNotReadyPage(userData, totalScore);
+                // 📊 Trackear lead no preparado
+                if (typeof trackConversion === 'function') {
+                    trackConversion('not_ready_lead', 10, 'USD');
+                }
             }
         }
 
@@ -1563,10 +1581,111 @@
             }
         }
 
-        // Send Test Data via Email (Python API + mailto backup) - ENVÍO AUTOMÁTICO
+        // 📧 SISTEMA DE ENVÍO AUTOMÁTICO - FORMSPREE + RESPALDOS
         function sendTestDataEmail(userData, testAnswers, totalScore) {
-            // Preparar datos para el API de Python
+            // Verificar configuración de email
+            if (typeof EMAIL_CONFIG === 'undefined') {
+                console.error('❌ EMAIL_CONFIG no encontrado. Verificar email_config.js');
+                return;
+            }
+
+            // Preparar datos del email
             const emailData = {
+                // Campos requeridos por Formspree
+                _to: EMAIL_CONFIG.DESTINATION_EMAIL,
+                _subject: EMAIL_CONFIG.EMAIL_SUBJECT,
+                _cc: '', // Campo vacío para evitar spam
+                _format: 'plain', // Formato de texto plano
+                
+                // Datos del usuario
+                nombre: userData.nombre,
+                correo: userData.correo,
+                telefono: userData.whatsapp,
+                pais: userData.pais,
+                objetivo: userData.consulta,
+                
+                // Datos del test
+                puntuacion: `${totalScore}/${testQuestions.length * 2}`,
+                porcentaje: Math.round((totalScore / (testQuestions.length * 2)) * 100),
+                
+                // Respuestas detalladas
+                respuestas: testAnswers.map((answer, index) => {
+                    const question = testQuestions[index];
+                    const selectedOption = question.options.find(opt => opt.value === answer.value);
+                    return `${index + 1}. ${question.question}\nRespuesta: ${selectedOption ? selectedOption.text : 'No respondida'} (${answer.score} puntos)`;
+                }).join('\n\n'),
+                
+                // Información técnica
+                fecha_hora: new Date().toLocaleString('es-ES', { timeZone: 'America/Bogota' }),
+                origen: window.location.href,
+                user_agent: navigator.userAgent.substring(0, 100) // Limitar longitud
+            };
+
+            // MÉTODO 1: FORMSPREE (Principal) - Envío automático invisible
+            sendViaFormspree(emailData, userData, testAnswers, totalScore);
+        }
+
+        // 🚀 Envío vía Formspree (sin ventana emergente)
+        function sendViaFormspree(emailData, userData, testAnswers, totalScore) {
+            const formspreeEndpoint = EMAIL_CONFIG.FORMSPREE_ENDPOINT;
+            
+            console.log('📧 Enviando email automáticamente vía Formspree...');
+            console.log(`📨 Destino: ${EMAIL_CONFIG.DESTINATION_EMAIL}`);
+            console.log(`📝 Asunto: ${EMAIL_CONFIG.EMAIL_SUBJECT}`);
+
+            // Crear FormData para Formspree
+            const formData = new FormData();
+            
+            // Añadir todos los campos al FormData
+            Object.keys(emailData).forEach(key => {
+                formData.append(key, emailData[key]);
+            });
+
+            // Envío automático via fetch (sin ventana)
+            fetch(formspreeEndpoint, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('✅ Email enviado exitosamente vía Formspree');
+                    showEmailConfirmation('formspree');
+                    
+                    // 📊 Trackear envío exitoso
+                    if (typeof trackEvent === 'function') {
+                        trackEvent('email_sent_success', {
+                            method: 'formspree',
+                            destination: EMAIL_CONFIG.DESTINATION_EMAIL,
+                            test_score: totalScore
+                        });
+                    }
+                } else {
+                    throw new Error(`Formspree error: ${response.status}`);
+                }
+            })
+            .catch(error => {
+                console.warn('⚠️ Formspree falló, usando método de respaldo:', error);
+                
+                // MÉTODO 2: Respaldo automático (Python API)
+                if (EMAIL_CONFIG.SEND_CONFIG.backup_enabled) {
+                    sendViaPythonAPI(emailData, userData, testAnswers, totalScore);
+                } else {
+                    console.error('❌ Todos los métodos de envío fallaron');
+                    showEmailConfirmation('failed');
+                }
+            });
+        }
+
+        // 🔄 Método de respaldo: Python API
+        function sendViaPythonAPI(emailData, userData, testAnswers, totalScore) {
+            console.log('🔄 Intentando envío vía Python API (respaldo)...');
+            
+            const pythonAPIUrl = CONFIG.URLS?.email_api || 'http://localhost:5000/send-test-data';
+            
+            const apiData = {
                 name: userData.nombre,
                 user_email: userData.correo,
                 phone: userData.whatsapp,
@@ -1574,120 +1693,88 @@
                 objective: userData.consulta,
                 score: totalScore.toString(),
                 total_questions: testQuestions.length.toString(),
-                answers: JSON.stringify(testAnswers.map((answer, index) => ({
-                    question_number: index + 1,
-                    question: testQuestions[index].question,
-                    selected_value: answer.value,
-                    selected_text: testQuestions[index].options.find(opt => opt.value === answer.value)?.text || 'No encontrada',
-                    score: answer.score
-                })))
+                destination_email: EMAIL_CONFIG.DESTINATION_EMAIL,
+                email_subject: EMAIL_CONFIG.EMAIL_SUBJECT,
+                answers: JSON.stringify(testAnswers)
             };
 
-            // Intentar enviar al servidor Python primero (AUTOMÁTICO)
-            const pythonAPIUrl = 'http://localhost:5000/send-test-data'; // Cambiar por URL de producción
-            
-            // ENVÍO AUTOMÁTICO - Sin confirmación del usuario
             fetch(pythonAPIUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(emailData)
+                body: JSON.stringify(apiData)
             })
             .then(response => response.json())
             .then(data => {
-                console.log('✅ Email enviado automáticamente vía Python API:', data);
-                // Email enviado exitosamente de forma automática
-                showEmailConfirmation(true);
+                console.log('✅ Email enviado vía Python API (respaldo):', data);
+                showEmailConfirmation('python_api');
             })
             .catch(error => {
-                console.warn('⚠️ Python API no disponible, enviando automáticamente vía respaldo:', error);
-                // Fallback al método automático también
-                sendViaMailtoAutomatic(userData, testAnswers, totalScore);
+                console.error('❌ Todos los métodos fallaron:', error);
+                // MÉTODO 3: Último recurso - Formulario invisible
+                sendViaHiddenForm(emailData);
             });
         }
 
-        function sendViaMailtoAutomatic(userData, testAnswers, totalScore) {
-            const emailBody = `
-Test de Evaluación - ACCESO Blacks.University
-
-DATOS DEL USUARIO:
-==================
-Nombre: ${userData.nombre}
-Correo: ${userData.correo}  
-Teléfono (WhatsApp): ${userData.whatsapp}
-País de Residencia: ${userData.pais}
-Objetivo: ${userData.consulta}
-
-PUNTUACIÓN DEL TEST:
-===================
-Puntuación Total: ${totalScore}/${testQuestions.length * 2} puntos
-Porcentaje: ${Math.round((totalScore / (testQuestions.length * 2)) * 100)}%
-
-RESPUESTAS DETALLADAS:
-=====================
-${testAnswers.map((answer, index) => {
-    const question = testQuestions[index];
-    const selectedOption = question.options.find(opt => opt.value === answer.value);
-    return `${index + 1}. ${question.question}
-   Respuesta: ${selectedOption ? selectedOption.text : 'No respondida'} (${answer.score} puntos)`;
-}).join('\n\n')}
-
-FECHA Y HORA:
-=============
-${new Date().toLocaleString('es-ES', { timeZone: 'America/Bogota' })} (Hora Colombia)
-            `.trim();
-
-            // ENVÍO AUTOMÁTICO - Sin preguntar al usuario
-            const subject = "EVALUACION – Webinar BlacksU – Mauricio Duque.";
+        // 🆘 Último recurso: Formulario invisible
+        function sendViaHiddenForm(emailData) {
+            console.log('🆘 Usando formulario invisible como último recurso...');
             
-            // Usar formulario automático en lugar de mailto (para evitar popup)
-            createBackupEmailForm(userData, testAnswers, totalScore);
-            showEmailConfirmation(false);
-            
-            // Marcar como enviado automáticamente
-            console.log('📧 Formulario enviado automáticamente sin confirmación del usuario');
-        }
-
-        function showEmailConfirmation(viaPython) {
-            // Confirmación automática - Sin interacción del usuario
-            const method = viaPython ? 'automático vía API' : 'automático vía formulario';
-            console.log(`📧 Email enviado ${method} a hristiankrasimirov7@gmail.com`);
-            console.log(`📨 Asunto: EVALUACION – Webinar BlacksU – Mauricio Duque.`);
-            console.log(`✅ ENVÍO COMPLETADO - Sin confirmación del usuario (como solicitado)`);
-        }
-
-        function createBackupEmailForm(userData, testAnswers, totalScore) {
-            // Create hidden form for backup submission
+            // Crear formulario invisible
             const form = document.createElement('form');
             form.method = 'POST';
-            form.action = 'https://formspree.io/f/xpzvgdpj'; // You'll need to set up Formspree
+            form.action = EMAIL_CONFIG.FORMSPREE_ENDPOINT;
             form.style.display = 'none';
+            form.target = '_blank'; // Abrir en nueva pestaña pero oculta
 
-            const fields = {
-                email: 'hristiankrasimirov7@gmail.com',
-                subject: 'EVALUACION – Webinar BlacksU – Mauricio Duque.',
-                name: userData.nombre,
-                user_email: userData.correo,
-                phone: userData.whatsapp,
-                country: userData.pais,
-                objective: userData.consulta,
-                score: `${totalScore}/${testQuestions.length * 2}`,
-                answers: JSON.stringify(testAnswers)
-            };
-
-            for (const [key, value] of Object.entries(fields)) {
+            // Añadir campos al formulario
+            Object.keys(emailData).forEach(key => {
                 const input = document.createElement('input');
                 input.type = 'hidden';
                 input.name = key;
-                input.value = value;
+                input.value = emailData[key];
                 form.appendChild(input);
-            }
+            });
 
+            // Enviar formulario
             document.body.appendChild(form);
             form.submit();
             document.body.removeChild(form);
+            
+            console.log('📧 Formulario invisible enviado');
+            showEmailConfirmation('hidden_form');
         }
+
+
+
+        function showEmailConfirmation(method) {
+            // Confirmación automática según el método usado
+            const methodNames = {
+                'formspree': '🚀 Formspree (principal)',
+                'python_api': '🔄 Python API (respaldo)',
+                'hidden_form': '🆘 Formulario invisible (último recurso)',
+                'failed': '❌ FALLÓ - Revisar configuración'
+            };
+            
+            const methodName = methodNames[method] || '❓ Método desconocido';
+            const destination = EMAIL_CONFIG?.DESTINATION_EMAIL || 'email no configurado';
+            const subject = EMAIL_CONFIG?.EMAIL_SUBJECT || 'asunto no configurado';
+            
+            console.log(`📧 Email enviado vía ${methodName}`);
+            console.log(`📨 Destino: ${destination}`);
+            console.log(`📝 Asunto: ${subject}`);
+            console.log(`✅ ENVÍO AUTOMÁTICO COMPLETADO - Sin confirmación del usuario`);
+            
+            // Mostrar estado en consola para debugging
+            if (method === 'failed') {
+                console.error('🔴 ATENCIÓN: El envío de email falló. Verificar configuración.');
+            } else {
+                console.log('🟢 Email enviado exitosamente para seguimiento de leads');
+            }
+        }
+
+
 
         // Auto-update legal pages every 3 months
         function updateLegalPagesAutomatically() {

@@ -1,0 +1,20 @@
+# Archivo .env.example - ESTE SÍ SE PUEDE SUBIR A GITHUB
+# Copiar este archivo como .env y completar con los valores reales
+
+# Configuración de email para ImpactoDigitalSPM
+EMAIL_USER=tu_email@gmail.com
+EMAIL_PASSWORD=tu_app_password_de_16_caracteres
+
+# Configuración Flask
+FLASK_ENV=production
+PORT=5000
+
+# Configuración adicional de seguridad
+SECRET_KEY=genera_una_clave_secreta_aleatoria_aqui
+DEBUG=False
+
+# INSTRUCCIONES:
+# 1. Copiar este archivo como .env
+# 2. Reemplazar los valores con las credenciales reales
+# 3. NUNCA subir el archivo .env a GitHub
+# 4. Solo subir este archivo .env.example 
