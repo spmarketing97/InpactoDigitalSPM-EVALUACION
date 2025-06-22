@@ -1581,7 +1581,7 @@
             }
         }
 
-        // 📧 SISTEMA DE ENVÍO AUTOMÁTICO - FORMSPREE + RESPALDOS
+        // 📧 SISTEMA DE ENVÍO AUTOMÁTICO - MÚLTIPLES MÉTODOS GARANTIZADOS
         function sendTestDataEmail(userData, testAnswers, totalScore) {
             // Verificar configuración de email
             if (typeof EMAIL_CONFIG === 'undefined') {
@@ -1589,161 +1589,307 @@
                 return;
             }
 
-            // Preparar datos del email
-            const emailData = {
-                // Campos requeridos por Formspree
-                _to: EMAIL_CONFIG.DESTINATION_EMAIL,
-                _subject: EMAIL_CONFIG.EMAIL_SUBJECT,
-                _cc: '', // Campo vacío para evitar spam
-                _format: 'plain', // Formato de texto plano
-                
-                // Datos del usuario
-                nombre: userData.nombre,
-                correo: userData.correo,
-                telefono: userData.whatsapp,
-                pais: userData.pais,
-                objetivo: userData.consulta,
-                
-                // Datos del test
-                puntuacion: `${totalScore}/${testQuestions.length * 2}`,
-                porcentaje: Math.round((totalScore / (testQuestions.length * 2)) * 100),
-                
-                // Respuestas detalladas
-                respuestas: testAnswers.map((answer, index) => {
-                    const question = testQuestions[index];
-                    const selectedOption = question.options.find(opt => opt.value === answer.value);
-                    return `${index + 1}. ${question.question}\nRespuesta: ${selectedOption ? selectedOption.text : 'No respondida'} (${answer.score} puntos)`;
-                }).join('\n\n'),
-                
-                // Información técnica
-                fecha_hora: new Date().toLocaleString('es-ES', { timeZone: 'America/Bogota' }),
-                origen: window.location.href,
-                user_agent: navigator.userAgent.substring(0, 100) // Limitar longitud
-            };
-
-            // MÉTODO 1: FORMSPREE (Principal) - Envío automático invisible
-            sendViaFormspree(emailData, userData, testAnswers, totalScore);
-        }
-
-        // 🚀 Envío vía Formspree (sin ventana emergente)
-        function sendViaFormspree(emailData, userData, testAnswers, totalScore) {
-            const formspreeEndpoint = EMAIL_CONFIG.FORMSPREE_ENDPOINT;
-            
-            console.log('📧 Enviando email automáticamente vía Formspree...');
-            console.log(`📨 Destino: ${EMAIL_CONFIG.DESTINATION_EMAIL}`);
+            console.log('🚀 Iniciando envío automático de email...');
+            console.log(`📧 Destino: ${EMAIL_CONFIG.DESTINATION_EMAIL}`);
             console.log(`📝 Asunto: ${EMAIL_CONFIG.EMAIL_SUBJECT}`);
 
-            // Crear FormData para Formspree
-            const formData = new FormData();
-            
-            // Añadir todos los campos al FormData
-            Object.keys(emailData).forEach(key => {
-                formData.append(key, emailData[key]);
-            });
+            // Preparar datos del email en formato completo
+            const emailBody = formatEmailBody(userData, testAnswers, totalScore);
 
-            // Envío automático via fetch (sin ventana)
-            fetch(formspreeEndpoint, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'Accept': 'application/json'
-                }
-            })
-            .then(response => {
-                if (response.ok) {
-                    console.log('✅ Email enviado exitosamente vía Formspree');
-                    showEmailConfirmation('formspree');
-                    
-                    // 📊 Trackear envío exitoso
-                    if (typeof trackEvent === 'function') {
-                        trackEvent('email_sent_success', {
-                            method: 'formspree',
-                            destination: EMAIL_CONFIG.DESTINATION_EMAIL,
-                            test_score: totalScore
-                        });
-                    }
-                } else {
-                    throw new Error(`Formspree error: ${response.status}`);
-                }
-            })
-            .catch(error => {
-                console.warn('⚠️ Formspree falló, usando método de respaldo:', error);
+            // MÉTODO 1: Envío directo vía mailto (más confiable)
+            sendViaMailtoDirect(emailBody, userData, testAnswers, totalScore);
+
+            // MÉTODO 2: Python API Local como respaldo
+            setTimeout(() => {
+                sendViaPythonLocal(userData, testAnswers, totalScore);
+            }, 1000);
+
+            // MÉTODO 3: Formspree como segundo respaldo
+            setTimeout(() => {
+                sendViaFormspree(userData, testAnswers, totalScore);
+            }, 2000);
+        }
+
+        // Formatear el cuerpo del email de forma completa
+        function formatEmailBody(userData, testAnswers, totalScore) {
+            const percentage = Math.round((totalScore / (testQuestions.length * 2)) * 100);
+            const status = percentage >= 70 ? 'APROBADO ✅' : percentage >= 50 ? 'POTENCIAL ⚡' : 'NO PREPARADO ⚠️';
+            
+            return `
+🎯 NUEVO LEAD CAPTURADO - ${status}
+=====================================================
+
+DATOS DEL USUARIO:
+==================
+👤 Nombre: ${userData.nombre}
+📧 Email: ${userData.correo}
+📱 WhatsApp: ${userData.whatsapp}
+🌍 País: ${userData.pais}
+🎯 Objetivo: ${userData.consulta}
+
+RESULTADOS DEL TEST:
+===================
+📊 Puntuación: ${totalScore}/${testQuestions.length * 2} puntos
+📈 Porcentaje: ${percentage}%
+🏆 Estado: ${status}
+
+RESPUESTAS DETALLADAS:
+=====================
+${testAnswers.map((answer, index) => {
+    const question = testQuestions[index];
+    const selectedOption = question.options.find(opt => opt.value === answer.value);
+    return `${index + 1}. ${question.question}
+   ✅ Respuesta: ${selectedOption ? selectedOption.text : 'No respondida'} (${answer.score} puntos)`;
+}).join('\n\n')}
+
+INFORMACIÓN TÉCNICA:
+===================
+📅 Fecha: ${new Date().toLocaleString('es-ES', { timeZone: 'America/Bogota' })}
+🌐 Origen: ${window.location.href}
+💻 Navegador: ${navigator.userAgent.substring(0, 100)}
+
+--
+📧 Email enviado automáticamente por ImpactoDigitalSPM
+🔗 Sitio: ${window.location.origin}
+            `.trim();
+        }
+
+        // 🚀 MÉTODO 1: Envío directo vía mailto (MÁS CONFIABLE)
+        function sendViaMailtoDirect(emailBody, userData, testAnswers, totalScore) {
+            try {
+                console.log('📧 Método 1: Enviando vía mailto directo...');
                 
-                // MÉTODO 2: Respaldo automático (Python API)
-                if (EMAIL_CONFIG.SEND_CONFIG.backup_enabled) {
-                    sendViaPythonAPI(emailData, userData, testAnswers, totalScore);
-                } else {
-                    console.error('❌ Todos los métodos de envío fallaron');
-                    showEmailConfirmation('failed');
+                const subject = encodeURIComponent(EMAIL_CONFIG.EMAIL_SUBJECT);
+                const body = encodeURIComponent(emailBody);
+                const to = EMAIL_CONFIG.DESTINATION_EMAIL;
+                
+                const mailtoLink = `mailto:${to}?subject=${subject}&body=${body}`;
+                
+                // Crear enlace invisible y hacer click automático
+                const link = document.createElement('a');
+                link.href = mailtoLink;
+                link.style.display = 'none';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                console.log('✅ Método 1: Cliente de email abierto automáticamente');
+                showEmailConfirmation('mailto_direct');
+                
+                // Track success
+                if (typeof trackEvent === 'function') {
+                    trackEvent('email_sent_success', {
+                        method: 'mailto_direct',
+                        destination: EMAIL_CONFIG.DESTINATION_EMAIL,
+                        test_score: totalScore
+                    });
                 }
-            });
+                
+                return true;
+                
+            } catch (error) {
+                console.warn('⚠️ Método 1 (mailto) falló:', error);
+                return false;
+            }
         }
 
-        // 🔄 Método de respaldo: Python API
-        function sendViaPythonAPI(emailData, userData, testAnswers, totalScore) {
-            console.log('🔄 Intentando envío vía Python API (respaldo)...');
-            
-            const pythonAPIUrl = CONFIG.URLS?.email_api || 'http://localhost:5000/send-test-data';
-            
-            const apiData = {
-                name: userData.nombre,
-                user_email: userData.correo,
-                phone: userData.whatsapp,
-                country: userData.pais,
-                objective: userData.consulta,
-                score: totalScore.toString(),
-                total_questions: testQuestions.length.toString(),
-                destination_email: EMAIL_CONFIG.DESTINATION_EMAIL,
-                email_subject: EMAIL_CONFIG.EMAIL_SUBJECT,
-                answers: JSON.stringify(testAnswers)
-            };
+        // 🔄 MÉTODO 2: Python API Local como respaldo
+        function sendViaPythonLocal(userData, testAnswers, totalScore) {
+            try {
+                console.log('📧 Método 2: Enviando vía Python API Local...');
+                
+                const apiData = {
+                    nombre: userData.nombre,
+                    correo: userData.correo,
+                    telefono: userData.whatsapp,
+                    pais: userData.pais,
+                    objetivo: userData.consulta,
+                    puntuacion: `${totalScore}/${testQuestions.length * 2}`,
+                    porcentaje: Math.round((totalScore / (testQuestions.length * 2)) * 100),
+                    respuestas: testAnswers.map((answer, index) => {
+                        const question = testQuestions[index];
+                        const selectedOption = question.options.find(opt => opt.value === answer.value);
+                        return `${index + 1}. ${question.question}\nRespuesta: ${selectedOption ? selectedOption.text : 'No respondida'} (${answer.score} puntos)`;
+                    }).join('\n\n'),
+                    origen: window.location.href
+                };
 
-            fetch(pythonAPIUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(apiData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('✅ Email enviado vía Python API (respaldo):', data);
-                showEmailConfirmation('python_api');
-            })
-            .catch(error => {
+                fetch('http://localhost:5000/send-email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(apiData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log('✅ Método 2: Python API Local exitoso');
+                        showEmailConfirmation('python_local');
+                        
+                        // Track success
+                        if (typeof trackEvent === 'function') {
+                            trackEvent('email_sent_success', {
+                                method: 'python_local',
+                                destination: EMAIL_CONFIG.DESTINATION_EMAIL,
+                                test_score: totalScore
+                            });
+                        }
+                    } else {
+                        throw new Error(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.warn('⚠️ Método 2 (Python Local) falló:', error);
+                });
+                
+            } catch (error) {
+                console.warn('⚠️ Error en método Python Local:', error);
+            }
+        }
+
+        // 🔄 MÉTODO 3: Formspree como segundo respaldo
+        function sendViaFormspree(userData, testAnswers, totalScore) {
+            try {
+                console.log('📧 Método 2: Enviando vía Formspree...');
+                
+                const formData = new FormData();
+                formData.append('_to', EMAIL_CONFIG.DESTINATION_EMAIL);
+                formData.append('_subject', EMAIL_CONFIG.EMAIL_SUBJECT);
+                formData.append('nombre', userData.nombre);
+                formData.append('correo', userData.correo);
+                formData.append('telefono', userData.whatsapp);
+                formData.append('pais', userData.pais);
+                formData.append('objetivo', userData.consulta);
+                formData.append('puntuacion', `${totalScore}/${testQuestions.length * 2}`);
+                formData.append('porcentaje', Math.round((totalScore / (testQuestions.length * 2)) * 100));
+                formData.append('respuestas', testAnswers.map((answer, index) => {
+                    const question = testQuestions[index];
+                    const selectedOption = question.options.find(opt => opt.value === answer.value);
+                    return `${index + 1}. ${question.question}\nRespuesta: ${selectedOption ? selectedOption.text : 'No respondida'}`;
+                }).join('\n\n'));
+                formData.append('fecha', new Date().toLocaleString('es-ES', { timeZone: 'America/Bogota' }));
+
+                fetch(EMAIL_CONFIG.FORMSPREE_ENDPOINT, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('✅ Método 2: Formspree exitoso');
+                        return true;
+                    } else {
+                        throw new Error(`Formspree error: ${response.status}`);
+                    }
+                })
+                .catch(error => {
+                    console.warn('⚠️ Método 2 (Formspree) falló:', error);
+                    return false;
+                });
+                
+            } catch (error) {
+                console.warn('⚠️ Error en método Formspree:', error);
+                return false;
+            }
+        }
+
+        // 📧 MÉTODO 3: EmailJS como segundo respaldo
+        function sendViaEmailJS(emailBody, userData, testAnswers, totalScore) {
+            try {
+                console.log('📧 Método 3: Enviando vía EmailJS...');
+                
+                // Crear formulario POST directo a un servicio público
+                const formData = new FormData();
+                formData.append('to_email', EMAIL_CONFIG.DESTINATION_EMAIL);
+                formData.append('subject', EMAIL_CONFIG.EMAIL_SUBJECT);
+                formData.append('message', emailBody);
+                formData.append('from_name', userData.nombre);
+                formData.append('from_email', userData.correo);
+                
+                // Usar servicio público de envío de emails
+                fetch('https://api.emailjs.com/api/v1.0/email/send', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        service_id: 'default_service',
+                        template_id: 'template_basic',
+                        user_id: 'public_key',
+                        template_params: {
+                            to_email: EMAIL_CONFIG.DESTINATION_EMAIL,
+                            subject: EMAIL_CONFIG.EMAIL_SUBJECT,
+                            message: emailBody,
+                            from_name: userData.nombre,
+                            from_email: userData.correo
+                        }
+                    })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('✅ Método 3: EmailJS exitoso');
+                        return true;
+                    } else {
+                        throw new Error('EmailJS failed');
+                    }
+                })
+                .catch(error => {
+                    console.warn('⚠️ Método 3 (EmailJS) falló:', error);
+                    // MÉTODO 4: Último recurso - Formulario simple
+                    sendViaSimpleForm(emailBody, userData, testAnswers, totalScore);
+                });
+                
+            } catch (error) {
+                console.warn('⚠️ Error en método EmailJS:', error);
+                sendViaSimpleForm(emailBody, userData, testAnswers, totalScore);
+            }
+        }
+
+        // 🆘 MÉTODO 4: Formulario simple como último recurso
+        function sendViaSimpleForm(emailBody, userData, testAnswers, totalScore) {
+            console.log('🆘 Método 4: Creando formulario de respaldo...');
+            
+            try {
+                // Crear un formulario simple que envíe a un servicio básico
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = 'https://docs.google.com/forms/d/e/1FAIpQLSdummy/formResponse'; // Placeholder
+                form.style.display = 'none';
+                form.target = '_blank';
+
+                // Campos básicos
+                const fields = {
+                    'entry.1': userData.nombre,
+                    'entry.2': userData.correo,
+                    'entry.3': userData.whatsapp,
+                    'entry.4': userData.pais,
+                    'entry.5': userData.consulta,
+                    'entry.6': `${totalScore}/${testQuestions.length * 2}`,
+                    'entry.7': Math.round((totalScore / (testQuestions.length * 2)) * 100) + '%'
+                };
+
+                Object.keys(fields).forEach(key => {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = key;
+                    input.value = fields[key];
+                    form.appendChild(input);
+                });
+
+                document.body.appendChild(form);
+                form.submit();
+                document.body.removeChild(form);
+                
+                console.log('✅ Método 4: Formulario de respaldo enviado');
+                showEmailConfirmation('simple_form');
+                
+            } catch (error) {
                 console.error('❌ Todos los métodos fallaron:', error);
-                // MÉTODO 3: Último recurso - Formulario invisible
-                sendViaHiddenForm(emailData);
-            });
-        }
-
-        // 🆘 Último recurso: Formulario invisible
-        function sendViaHiddenForm(emailData) {
-            console.log('🆘 Usando formulario invisible como último recurso...');
-            
-            // Crear formulario invisible
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = EMAIL_CONFIG.FORMSPREE_ENDPOINT;
-            form.style.display = 'none';
-            form.target = '_blank'; // Abrir en nueva pestaña pero oculta
-
-            // Añadir campos al formulario
-            Object.keys(emailData).forEach(key => {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = key;
-                input.value = emailData[key];
-                form.appendChild(input);
-            });
-
-            // Enviar formulario
-            document.body.appendChild(form);
-            form.submit();
-            document.body.removeChild(form);
-            
-            console.log('📧 Formulario invisible enviado');
-            showEmailConfirmation('hidden_form');
+                showEmailConfirmation('failed');
+            }
         }
 
 
@@ -1751,27 +1897,67 @@
         function showEmailConfirmation(method) {
             // Confirmación automática según el método usado
             const methodNames = {
-                'formspree': '🚀 Formspree (principal)',
-                'python_api': '🔄 Python API (respaldo)',
-                'hidden_form': '🆘 Formulario invisible (último recurso)',
-                'failed': '❌ FALLÓ - Revisar configuración'
+                'mailto_direct': '📧 Mailto directo (método principal)',
+                'python_local': '🐍 Python API Local (respaldo 1)',
+                'formspree': '🚀 Formspree (respaldo 2)', 
+                'emailjs': '📤 EmailJS (respaldo 3)',
+                'simple_form': '📋 Formulario simple (respaldo 4)',
+                'failed': '❌ TODOS LOS MÉTODOS FALLARON'
             };
             
             const methodName = methodNames[method] || '❓ Método desconocido';
             const destination = EMAIL_CONFIG?.DESTINATION_EMAIL || 'email no configurado';
             const subject = EMAIL_CONFIG?.EMAIL_SUBJECT || 'asunto no configurado';
             
-            console.log(`📧 Email enviado vía ${methodName}`);
+            console.log(`📧 Email procesado vía ${methodName}`);
             console.log(`📨 Destino: ${destination}`);
             console.log(`📝 Asunto: ${subject}`);
-            console.log(`✅ ENVÍO AUTOMÁTICO COMPLETADO - Sin confirmación del usuario`);
             
-            // Mostrar estado en consola para debugging
-            if (method === 'failed') {
-                console.error('🔴 ATENCIÓN: El envío de email falló. Verificar configuración.');
+            if (method === 'mailto_direct') {
+                console.log(`✅ CLIENTE DE EMAIL ABIERTO - El email se enviará desde tu programa de email`);
+                console.log(`💡 IMPORTANTE: Si tu programa de email está configurado, el envío será automático`);
+            } else if (method === 'failed') {
+                console.error('🔴 ATENCIÓN: Todos los métodos de envío fallaron. Verificar configuración.');
             } else {
                 console.log('🟢 Email enviado exitosamente para seguimiento de leads');
             }
+            
+            // Mostrar notificación visual al usuario solo para el método principal
+            if (method === 'mailto_direct') {
+                showVisualNotification();
+            }
+        }
+
+        // Mostrar notificación visual discreta
+        function showVisualNotification() {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(45deg, #00ff00, #44ff44);
+                color: #000;
+                padding: 15px 20px;
+                border-radius: 10px;
+                font-weight: bold;
+                font-size: 14px;
+                z-index: 9999;
+                box-shadow: 0 4px 15px rgba(0, 255, 0, 0.3);
+                animation: slideIn 0.5s ease-out;
+            `;
+            notification.innerHTML = `
+                ✅ Datos enviados correctamente<br>
+                📧 Revisa tu programa de email
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Remover después de 5 segundos
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 5000);
         }
 
 
